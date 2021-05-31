@@ -6,7 +6,7 @@ import wrong from '../Assets/src_sounds_wrong.mp3'
 
 
 
-const Trivia = ({data, setTimeOut, questionNumber,setQuestionNumber}) => {
+const Trivia = ({data, setStop, questionNumber,setQuestionNumber}) => {
     const[question, setQuestion] = useState(null)
     const[selectedAnswer, setSelectedAnswer] = useState(null)
     const[classname, setClassname] = useState("answer")
@@ -35,10 +35,18 @@ const Trivia = ({data, setTimeOut, questionNumber,setQuestionNumber}) => {
         delay(3000, ()=>{ setClassname(a.correct? "answer correct":" answer wrong")})
         delay(6000, ()=>{ 
             if(a.correct){
-                setQuestionNumber((prev)=> prev + 1)
-                setSelectedAnswer(null)
+                correctAnswer()
+                delay(1000,()=>{
+                    setQuestionNumber((prev)=> prev + 1)
+                    setSelectedAnswer(null)
+                })
+               
             }else{
-                setTimeOut(true)
+                wrongAnswer()
+                delay(1000,()=>{
+                    setStop(true)
+                })
+                
             }
         })
         

@@ -1,11 +1,13 @@
 import {useState, useEffect, useMemo} from 'react'
+import Start from './Components/Start'
 import Timer from './Components/Timer'
 import Trivia from './Components/Trivia'
 
 function App() {
   const[questionNumber, setQuestionNumber] = useState(1)
-  const[timeOut, setTimeOut] = useState(false)
+  const[stop, setStop] = useState(false)
   const[earned, setEarned] = useState("$ 0")
+  const [start, setStart] = useState(false)
 
   const data = [
     {
@@ -102,40 +104,46 @@ function App() {
   }, [moneyPyramid, questionNumber])
   return (
     <div className="app">
-      
-      <div className="main">
-        {timeOut? <h1 className="endText">You Earned: {earned} </h1> :(
-        <>
-        <div className="top">
-          <div className="timer">
-            <Timer timeOut={timeOut} questionNumber={questionNumber}/>
+      {
+        start ? <>
+          <div className="main">
+          {stop? <h1 className="endText">You Earned: {earned} </h1> :(
+          <>
+          <div className="top">
+            <div className="timer">
+              <Timer setStop={setStop} questionNumber={questionNumber}/>
+            </div>
           </div>
+          <div className="bottom">
+            <Trivia
+              data={data}
+              setStop={setStop} 
+              setQuestionNumber={setQuestionNumber}
+              questionNumber={questionNumber}
+              />
+          </div>
+          </>
+          )}
         </div>
-        <div className="bottom">
-          <Trivia
-            data={data}
-            setTimeOut={setTimeOut} 
-            setQuestionNumber={setQuestionNumber}
-            questionNumber={questionNumber}
-            />
+        <div className="money">
+          <ul className="moneyList">
+            {
+              moneyPyramid.map((m)=>(
+                <li className={questionNumber === m.id? "moneyListItem active": "moneyListItem"} key={m.id}>
+                  <span className="number">{m.id}</span>
+                  <span className="amount">{m.amount}</span>
+                </li>
+              ))
+            }
+            
+  
+          </ul>
         </div>
+        </>:<>
+            <Start setStart={setStart} start={start}/>
         </>
-        )}
-      </div>
-      <div className="money">
-        <ul className="moneyList">
-          {
-            moneyPyramid.map((m)=>(
-              <li className={questionNumber === m.id? "moneyListItem active": "moneyListItem"} key={m.id}>
-                <span className="number">{m.id}</span>
-                <span className="amount">{m.amount}</span>
-              </li>
-            ))
-          }
-          
-
-        </ul>
-      </div>
+      }
+     
      
     </div>
   );
