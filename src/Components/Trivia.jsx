@@ -3,10 +3,11 @@ import useSound from 'use-sound'
 import play from '../Assets/src_sounds_play.mp3'
 import correct from '../Assets/src_sounds_correct.mp3'
 import wrong from '../Assets/src_sounds_wrong.mp3'
+import {Hidden} from '@material-ui/core'
 
 
 
-const Trivia = ({data, setStop, questionNumber,setQuestionNumber}) => {
+const Trivia = ({data, setStop, questionNumber,setQuestionNumber,earning,setEarned}) => {
     const[question, setQuestion] = useState(null)
     const[selectedAnswer, setSelectedAnswer] = useState(null)
     const[classname, setClassname] = useState("answer")
@@ -42,6 +43,11 @@ const Trivia = ({data, setStop, questionNumber,setQuestionNumber}) => {
                 })
                
             }else{
+                if(questionNumber === 1){
+                    setEarned(0)
+                }
+                
+
                 wrongAnswer()
                 delay(1000,()=>{
                     setStop(true)
@@ -53,6 +59,9 @@ const Trivia = ({data, setStop, questionNumber,setQuestionNumber}) => {
     }
     return ( 
         <div className="trivia">
+            <Hidden mdUp>
+                <div className="moneyList_mobile"><span className="earning">${earning}</span> {questionNumber}/3 <span></span></div>
+            </Hidden>
             <div className="question">{question?.question}</div>
             <div className="answers">
                 {question?.answers.map((a)=>(
